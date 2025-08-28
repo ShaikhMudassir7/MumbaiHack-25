@@ -1,0 +1,316 @@
+2025-07-31 13:41:51,249 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 13:41:51,252 ERROR: Query processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 14:05:53,052 ERROR: JSON decode error: Expecting ',' delimiter: line 95 column 36 (char 3484) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:679]
+2025-07-31 14:36:56,666 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 14:36:56,671 ERROR: Query processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 14:48:11,754 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 14:48:11,756 ERROR: Query processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 14:56:08,037 ERROR: Request error: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 14:56:08,039 ERROR: Query processing failed: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 14:56:49,657 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 14:56:49,662 ERROR: Query processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 15:06:11,464 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 15:06:11,467 ERROR: Query processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 15:15:42,226 ERROR: OCR extraction failed: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:473]
+2025-07-31 15:15:42,227 ERROR: Error processing upload: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:274]
+2025-07-31 15:15:42,238 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 240, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 406, in extract_text_with_selected_ocr
+    return extract_text_with_ocr(pdf_path)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 494, in extract_text_with_ocr
+    raise RuntimeError("All OCR methods failed")
+RuntimeError: All OCR methods failed
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:275]
+2025-07-31 15:15:47,159 ERROR: OCR extraction failed: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:473]
+2025-07-31 15:15:47,160 ERROR: Error processing upload: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:274]
+2025-07-31 15:15:47,160 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 240, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 406, in extract_text_with_selected_ocr
+    return extract_text_with_ocr(pdf_path)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 494, in extract_text_with_ocr
+    raise RuntimeError("All OCR methods failed")
+RuntimeError: All OCR methods failed
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:275]
+2025-07-31 15:16:06,263 ERROR: OCR extraction failed: PyMuPDF extracted insufficient text [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:473]
+2025-07-31 15:16:06,269 ERROR: Error processing upload: PyMuPDF extracted insufficient text [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:274]
+2025-07-31 15:16:06,274 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 240, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 417, in extract_text_with_selected_ocr
+    raise RuntimeError("PyMuPDF extracted insufficient text")
+RuntimeError: PyMuPDF extracted insufficient text
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:275]
+2025-07-31 15:18:59,812 ERROR: Error processing upload: 413 Request Entity Too Large: The data value transmitted exceeds the capacity limit. [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:274]
+2025-07-31 15:19:00,073 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 202, in upload_file
+    if 'file' not in request.files:
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\werkzeug\utils.py", line 106, in __get__
+    value = self.fget(obj)  # type: ignore
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\werkzeug\wrappers\request.py", line 498, in files
+    self._load_form_data()
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\flask\wrappers.py", line 114, in _load_form_data
+    super()._load_form_data()
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\werkzeug\wrappers\request.py", line 271, in _load_form_data
+    self._get_stream_for_parsing(),
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\werkzeug\wrappers\request.py", line 298, in _get_stream_for_parsing
+    return self.stream
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\werkzeug\utils.py", line 106, in __get__
+    value = self.fget(obj)  # type: ignore
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\werkzeug\wrappers\request.py", line 350, in stream
+    return get_input_stream(
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\werkzeug\wsgi.py", line 179, in get_input_stream
+    raise RequestEntityTooLarge()
+werkzeug.exceptions.RequestEntityTooLarge: 413 Request Entity Too Large: The data value transmitted exceeds the capacity limit.
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:275]
+2025-07-31 16:05:04,716 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 16:05:04,724 ERROR: Query processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 16:05:51,256 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 16:05:51,260 ERROR: Query processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=30) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 16:05:56,616 ERROR: Request error: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 16:05:56,630 ERROR: Query processing failed: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 16:06:05,382 ERROR: Request error: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 16:06:05,383 ERROR: Query processing failed: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 16:12:42,176 ERROR: Request error: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 16:12:42,196 ERROR: Query processing failed: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 16:13:12,538 ERROR: Request error: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 16:13:12,555 ERROR: Query processing failed: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-07-31 16:13:20,607 ERROR: Request error: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:687]
+2025-07-31 16:13:20,642 ERROR: Query processing failed: 429 Client Error: Too Many Requests for url: https://api.mistral.ai/v1/chat/completions [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:620]
+2025-08-01 11:15:26,525 ERROR: OCR extraction failed: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:577]
+2025-08-01 11:15:26,533 ERROR: Error processing file 1-10.pdf: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:465]
+2025-08-01 11:15:45,840 ERROR: OCR extraction failed: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:577]
+2025-08-01 11:15:45,857 ERROR: Error processing file 11-20.pdf: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:465]
+2025-08-01 11:42:01,119 ERROR: OCR extraction failed: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1344]
+2025-08-01 11:42:01,119 ERROR: Error processing upload: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:498]
+2025-08-01 11:42:01,135 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 459, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 1277, in extract_text_with_selected_ocr
+    return extract_text_with_ocr(pdf_path)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 1365, in extract_text_with_ocr
+    raise RuntimeError("All OCR methods failed")
+RuntimeError: All OCR methods failed
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:499]
+2025-08-01 11:42:12,852 ERROR: OCR extraction failed: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1344]
+2025-08-01 11:42:12,854 ERROR: Error processing upload: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:498]
+2025-08-01 11:42:12,854 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 459, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 1277, in extract_text_with_selected_ocr
+    return extract_text_with_ocr(pdf_path)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 1365, in extract_text_with_ocr
+    raise RuntimeError("All OCR methods failed")
+RuntimeError: All OCR methods failed
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:499]
+2025-08-01 11:42:19,363 ERROR: OCR extraction failed: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1344]
+2025-08-01 11:42:19,371 ERROR: Error processing upload: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:498]
+2025-08-01 11:42:19,387 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 459, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 1277, in extract_text_with_selected_ocr
+    return extract_text_with_ocr(pdf_path)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 1365, in extract_text_with_ocr
+    raise RuntimeError("All OCR methods failed")
+RuntimeError: All OCR methods failed
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:499]
+2025-08-01 11:42:28,599 ERROR: OCR extraction failed: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1344]
+2025-08-01 11:42:28,599 ERROR: Error processing upload: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:498]
+2025-08-01 11:42:28,599 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 459, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 1277, in extract_text_with_selected_ocr
+    return extract_text_with_ocr(pdf_path)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 1365, in extract_text_with_ocr
+    raise RuntimeError("All OCR methods failed")
+RuntimeError: All OCR methods failed
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:499]
+2025-08-01 12:18:12,452 ERROR: OCR extraction failed: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:542]
+2025-08-01 12:18:12,463 ERROR: Error processing upload: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:305]
+2025-08-01 12:18:12,465 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 266, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(temp_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 475, in extract_text_with_selected_ocr
+    return extract_text_with_ocr(pdf_path)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 563, in extract_text_with_ocr
+    raise RuntimeError("All OCR methods failed")
+RuntimeError: All OCR methods failed
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:306]
+2025-08-01 12:21:59,008 ERROR: OCR extraction failed: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:475]
+2025-08-01 12:21:59,016 ERROR: Error processing upload: All OCR methods failed [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:274]
+2025-08-01 12:21:59,031 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 240, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 408, in extract_text_with_selected_ocr
+    return extract_text_with_ocr(pdf_path)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 496, in extract_text_with_ocr
+    raise RuntimeError("All OCR methods failed")
+RuntimeError: All OCR methods failed
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:275]
+2025-08-01 13:28:18,581 ERROR: OCR extraction failed: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:475]
+2025-08-01 13:28:18,584 ERROR: Error processing upload: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:274]
+2025-08-01 13:28:18,836 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 240, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 463, in extract_text_with_selected_ocr
+    text += pytesseract.image_to_string(img, config=custom_config)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 423, in image_to_string
+    return {
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 426, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 288, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 249, in run_tesseract
+    cmd_args += shlex.split(config)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 315, in split
+    return list(lex)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 300, in __next__
+    token = self.get_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 109, in get_token
+    raw = self.read_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 191, in read_token
+    raise ValueError("No closing quotation")
+ValueError: No closing quotation
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:275]
+2025-08-01 13:28:33,084 ERROR: OCR extraction failed: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:475]
+2025-08-01 13:28:33,092 ERROR: Error processing upload: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:274]
+2025-08-01 13:28:33,101 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 240, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 463, in extract_text_with_selected_ocr
+    text += pytesseract.image_to_string(img, config=custom_config)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 423, in image_to_string
+    return {
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 426, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 288, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 249, in run_tesseract
+    cmd_args += shlex.split(config)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 315, in split
+    return list(lex)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 300, in __next__
+    token = self.get_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 109, in get_token
+    raw = self.read_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 191, in read_token
+    raise ValueError("No closing quotation")
+ValueError: No closing quotation
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:275]
+2025-08-01 13:31:13,594 ERROR: OCR extraction failed: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:476]
+2025-08-01 13:31:13,598 ERROR: Error processing upload: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:274]
+2025-08-01 13:31:13,603 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 240, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 463, in extract_text_with_selected_ocr
+    text += pytesseract.image_to_string(img, config=custom_config)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 423, in image_to_string
+    return {
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 426, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 288, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 249, in run_tesseract
+    cmd_args += shlex.split(config)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 315, in split
+    return list(lex)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 300, in __next__
+    token = self.get_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 109, in get_token
+    raw = self.read_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 191, in read_token
+    raise ValueError("No closing quotation")
+ValueError: No closing quotation
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:275]
+2025-08-01 13:31:24,385 ERROR: OCR extraction failed: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:476]
+2025-08-01 13:31:24,386 ERROR: Error processing upload: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:274]
+2025-08-01 13:31:24,387 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 240, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 463, in extract_text_with_selected_ocr
+    text += pytesseract.image_to_string(img, config=custom_config)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 423, in image_to_string
+    return {
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 426, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 288, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 249, in run_tesseract
+    cmd_args += shlex.split(config)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 315, in split
+    return list(lex)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 300, in __next__
+    token = self.get_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 109, in get_token
+    raw = self.read_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 191, in read_token
+    raise ValueError("No closing quotation")
+ValueError: No closing quotation
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:275]
+2025-08-01 13:33:08,428 ERROR: OCR extraction failed: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:475]
+2025-08-01 13:33:08,439 ERROR: Error processing upload: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:274]
+2025-08-01 13:33:08,458 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 240, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py", line 463, in extract_text_with_selected_ocr
+    text += pytesseract.image_to_string(img, config=custom_config)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 423, in image_to_string
+    return {
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 426, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 288, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 249, in run_tesseract
+    cmd_args += shlex.split(config)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 315, in split
+    return list(lex)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 300, in __next__
+    token = self.get_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 109, in get_token
+    raw = self.read_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 191, in read_token
+    raise ValueError("No closing quotation")
+ValueError: No closing quotation
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app.py:275]
+2025-08-01 14:17:09,899 ERROR: Error generating PDF preview: no such file: 'uploads\20250801_141446_0_1-10.pdf' [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:491]
+2025-08-01 14:17:09,917 ERROR: Upload failed: no such file: 'uploads\20250801_141446_0_1-10.pdf' [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:346]
+2025-08-01 14:18:48,218 ERROR: Error generating PDF preview: no such file: 'uploads\20250801_141755_0_1-10.pdf' [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:491]
+2025-08-01 14:18:48,221 ERROR: Upload failed: no such file: 'uploads\20250801_141755_0_1-10.pdf' [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:346]
+2025-08-04 14:52:24,138 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1110]
+2025-08-04 14:52:24,158 ERROR: LLM processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1031]
+2025-08-04 16:06:51,540 ERROR: OCR extraction failed: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:801]
+2025-08-04 16:06:51,547 ERROR: Error processing upload: No closing quotation [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:402]
+2025-08-04 16:06:51,584 ERROR: Traceback (most recent call last):
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 368, in upload_file
+    extracted_text, ocr_method = extract_text_with_selected_ocr(file_path, ocr_model)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py", line 789, in extract_text_with_selected_ocr
+    text += pytesseract.image_to_string(img, config=custom_config)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 423, in image_to_string
+    return {
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 426, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 288, in run_and_get_output
+    run_tesseract(**kwargs)
+  File "C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\lib\site-packages\pytesseract\pytesseract.py", line 249, in run_tesseract
+    cmd_args += shlex.split(config)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 315, in split
+    return list(lex)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 300, in __next__
+    token = self.get_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 109, in get_token
+    raw = self.read_token()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\shlex.py", line 191, in read_token
+    raise ValueError("No closing quotation")
+ValueError: No closing quotation
+ [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:403]
+2025-08-04 16:23:18,338 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1110]
+2025-08-04 16:23:18,342 ERROR: LLM processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1031]
+2025-08-04 22:34:38,375 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1110]
+2025-08-04 22:34:38,385 ERROR: LLM processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1031]
+2025-08-04 22:35:42,872 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1110]
+2025-08-04 22:35:42,878 ERROR: LLM processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1031]
+2025-08-04 22:40:16,314 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1110]
+2025-08-04 22:40:16,319 ERROR: LLM processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1031]
+2025-08-04 22:41:01,520 ERROR: Request error: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1110]
+2025-08-04 22:41:01,524 ERROR: LLM processing failed: HTTPSConnectionPool(host='api.mistral.ai', port=443): Read timed out. (read timeout=45) [in C:\Users\Sanket\Downloads\Scanned PDF Invoice Extractor using Agents\Impl 2\app2.py:1031]

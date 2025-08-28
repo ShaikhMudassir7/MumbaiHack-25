@@ -1,0 +1,46 @@
+:root {
+  --bg: #ffffff;
+  --text: #1a1a1a;
+  --card: rgba(255, 255, 255, 0.7);
+  --accent: #667eea;
+}
+
+body.dark-mode {
+  --bg: #121212;
+  --text: #f0f0f0;
+  --card: rgba(40, 40, 40, 0.8);
+  --accent: #a78bfa;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.container {
+  max-width: 1600px;
+  margin: auto;
+  padding: 30px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.toggle-btn {
+  background: var(--accent);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* Add more styling from your previous design with updated vars */
