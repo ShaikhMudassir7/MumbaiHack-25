@@ -1,0 +1,2627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JDE Transaction Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-bg: #0d1117;
+            --secondary-bg: #161b22;
+            --border-color: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #848d97;
+            --accent-blue: #388bfd;
+            --accent-green: #3fb950;
+            --accent-red: #f85149;
+            --accent-yellow: #e3b341;
+            --accent-grey: #6e7681;
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+        }
+
+        /* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #000;
+  box-shadow: inset 0 0 5px white; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+box-shadow: inset 0 0 5px black;
+  background: white; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #fff; 
+}
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Enhanced Header with Icons */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header-left h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .header-left p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .icon-button {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .icon-button:hover {
+            background: var(--primary-bg);
+            border-color: var(--accent-blue);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            border: 2px solid var(--primary-bg);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+        
+        .user-avatar:hover {
+            border-color: var(--accent-blue);
+            transform: scale(1.05);
+        }
+        
+        /* Notification Dropdown */
+        .notification-panel {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 360px;
+            max-height: 500px;
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+        
+        .notification-panel.active {
+            display: block;
+        }
+        
+        .notification-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notification-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .clear-all {
+            font-size: 0.875rem;
+            color: var(--accent-blue);
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+        }
+        
+        .clear-all:hover {
+            text-decoration: underline;
+        }
+        
+        .notification-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .notification-item:hover {
+            background: var(--primary-bg);
+        }
+        
+        .notification-item.critical {
+            border-left: 3px solid var(--accent-red);
+        }
+        
+        .notification-item.warning {
+            border-left: 3px solid var(--accent-yellow);
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .notification-message {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-time {
+            font-size: 0.75rem;
+            color: var(--accent-grey);
+        }
+        
+        /* Collapsible Filters */
+        .filters {
+            background: var(--secondary-bg);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+        
+        .filter-header {
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            background: var(--secondary-bg);
+            transition: background 0.2s ease;
+        }
+        
+        .filter-header:hover {
+            background: rgba(56, 139, 253, 0.05);
+        }
+        
+        .filter-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-toggle {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .filter-toggle.expanded {
+            transform: rotate(180deg);
+        }
+        
+        .filter-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .filter-content.expanded {
+            max-height: 300px;
+        }
+        
+        .filter-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1.25rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .filter-item label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+        
+        select, button {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+        
+        select:focus, select:hover {
+            border-color: var(--accent-blue);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(56, 139, 253, 0.2);
+        }
+        
+        button {
+            background: var(--accent-blue);
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        button:hover {
+            background: #4a95fd;
+        }
+        
+        button:disabled {
+            background: var(--accent-grey);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        /* New Layout: KPIs Left, Charts Right */
+        .dashboard-layout {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .kpi-section {
+            flex: 0 0 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .charts-section {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        /* Compact KPI Cards */
+        .kpi-card {
+            background: var(--secondary-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            transition: all 0.2s ease;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .kpi-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .kpi-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .kpi-card.over-budget .kpi-value {
+            color: var(--accent-red);
+        }
+        
+        .kpi-card.under-budget .kpi-value {
+            color: var(--accent-green);
+        }
+        
+        /* Enhanced Chart Container with Action Buttons */
+        .chart-container {
+            background: var(--secondary-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            height: 320px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .chart-title {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .chart-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            padding: 0.4rem 0.6rem;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .action-btn:hover:not(:disabled) {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+        
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .action-btn.loading {
+            position: relative;
+            color: transparent;
+        }
+        
+        .action-btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            top: 50%;
+            left: 50%;
+            margin-left: -6px;
+            margin-top: -6px;
+            border: 2px solid var(--text-primary);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.6s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .chart-wrapper {
+            flex: 1;
+            position: relative;
+            min-height: 0;
+        }
+        
+        /* AI Insight Panel */
+        .ai-insight-panel {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 450px;
+            height: 100vh;
+            background: var(--secondary-bg);
+            border-left: 1px solid var(--border-color);
+            box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+            transition: right 0.3s ease;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .ai-insight-panel.active {
+            right: 0;
+        }
+        
+        .ai-insight-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ai-insight-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .close-insight {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-bg);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .close-insight:hover {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            color: white;
+        }
+        
+        .ai-insight-content {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        
+        .ai-insight-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: var(--text-secondary);
+        }
+        
+        .ai-insight-loading::before {
+            content: "";
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--accent-blue);
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        .ai-insight-text {
+            line-height: 1.6;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+        }
+        
+        .ai-insight-error {
+            padding: 1rem;
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid var(--accent-red);
+            border-radius: 6px;
+            color: var(--accent-red);
+        }
+        
+        /* Chart Zoom Modal */
+        .zoom-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+        
+        .zoom-modal.active {
+            display: flex;
+        }
+        
+        .zoom-content {
+            width: 90%;
+            height: 90%;
+            background: var(--secondary-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .zoom-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .zoom-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .close-zoom {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-bg);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .close-zoom:hover {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            color: white;
+        }
+        
+        .zoom-chart-wrapper {
+            height: calc(100% - 60px);
+        }
+        
+        /* Full Width Sections */
+        .full-width-section {
+            background: var(--secondary-bg);
+            padding: 1.25rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        #risk-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 0.4rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .risk-low { 
+            background: rgba(63, 185, 80, 0.15); 
+            color: var(--accent-green); 
+        }
+        .risk-medium { 
+            background: rgba(227, 179, 65, 0.15); 
+            color: var(--accent-yellow); 
+        }
+        .risk-critical { 
+            background: rgba(248, 81, 73, 0.15); 
+            color: var(--accent-red); 
+        }
+        .risk-no-budget { 
+            background: rgba(110, 118, 129, 0.15); 
+            color: var(--accent-grey); 
+        }
+        
+        /* Drilldown Table */
+        #drilldown-data {
+            overflow-x: auto;
+        }
+        
+        .drilldown-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.75rem;
+        }
+        
+        .drilldown-table th,
+        .drilldown-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+        
+        .drilldown-table th {
+            background-color: var(--primary-bg);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        
+        .drilldown-table tbody tr:hover {
+            background-color: var(--primary-bg);
+        }
+        
+        .status-over { color: var(--accent-red); font-weight: bold; }
+        .status-under { color: var(--accent-green); font-weight: bold; }
+        .status-on { color: var(--accent-blue); font-weight: bold; }
+        
+        .loading, .error {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .error {
+            color: var(--accent-red);
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid var(--accent-red);
+            border-radius: 6px;
+        }
+        
+        @media (max-width: 1400px) {
+            .dashboard-layout {
+                flex-direction: column;
+            }
+            
+            .kpi-section {
+                flex: none;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+            
+            .ai-insight-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .kpi-section {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .notification-panel {
+                width: calc(100vw - 40px);
+                right: -20px;
+            }
+            
+            .zoom-content {
+                width: 95%;
+                height: 95%;
+                padding: 1rem;
+            }
+            
+            .chart-actions {
+                flex-wrap: wrap;
+            }
+        }
+    /* Toggle Switch Styles */
+.chart-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    background: var(--primary-bg);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.toggle-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.chart-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    margin: 0;
+}
+
+.chart-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--accent-blue);
+    transition: 0.3s;
+    border-radius: 20px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.chart-toggle-switch input:checked + .toggle-slider {
+    background-color: var(--accent-green);
+}
+
+.chart-toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+}
+
+.chart-toggle-switch input:checked ~ .toggle-label:last-child {
+    color: var(--accent-green);
+}
+
+/* Heatmap Styles */
+#riskHeatmapChart {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.heatmap-container {
+    display: inline-block;
+    font-family: var(--font-family);
+}
+
+.heatmap-row {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 2px;
+}
+
+.heatmap-cell {
+    min-width: 50px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.1);
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.heatmap-label {
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.heatmap-header {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 0.5rem;
+    padding-left: 102px;
+}
+
+.heatmap-header-cell {
+    min-width: 50px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.heatmap-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+
+/* Heatmap color classes */
+.heatmap-green { background-color: #3fb950; color: white; }
+.heatmap-yellow { background-color: #e3b341; color: white; }
+.heatmap-orange { background-color: #fd8c73; color: white; }
+.heatmap-red { background-color: #f85149; color: white; }
+.heatmap-darkred { background-color: #c41e3a; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <h1>JDE Transaction Dashboard</h1>
+                <p>Comprehensive view of budget performance and risk analysis</p>
+            </div>
+            <div class="header-right">
+                <div class="icon-button" id="notification-btn" onclick="toggleNotifications()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-badge" id="notification-count">3</span>
+                    
+                    <div class="notification-panel" id="notification-panel">
+                        <div class="notification-header">
+                            <h3>Notifications</h3>
+                            <span class="clear-all" onclick="clearAllNotifications()">Clear all</span>
+                        </div>
+                        <div class="notification-list" id="notification-list">
+                            <!-- Notifications will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="user-avatar" title="User Profile">
+                    <span>JD</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="filters">
+            <div class="filter-header" onclick="toggleFilters()">
+                <div class="filter-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                    Filters
+                </div>
+                <span class="filter-toggle" id="filter-toggle">▼</span>
+            </div>
+            <div class="filter-content" id="filter-content">
+                <div class="filter-group">
+                    <div class="filter-item">
+                        <label for="company-select">Company</label>
+                        <select id="company-select" onchange="updateCostCodes()">
+                            <option value="">All Companies</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="cost-code-select">Cost Code</label>
+                        <select id="cost-code-select" onchange="updateAccountDescriptions()">
+                            <option value="">All Cost Codes</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="account-select">Account Description</label>
+                        <select id="account-select" onchange="updateDashboard()">
+                            <option value="">All Accounts</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>&nbsp;</label>
+                        <button onclick="updateDashboard()">Apply Filters</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-layout">
+            <div class="kpi-section">
+    <div class="kpi-card">
+        <div class="kpi-label">Total Budget</div>
+        <div class="kpi-value" id="total-budget">$0</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Total Actual</div>
+        <div class="kpi-value" id="total-actual">$0</div>
+    </div>
+    <div class="kpi-card" style="cursor: pointer;" onclick="showVarianceDrilldown('all')" title="Click to see details">
+        <div class="kpi-label">Total Variance</div>
+        <div class="kpi-value" id="total-variance">$0</div>
+    </div>
+    <div class="kpi-card over-budget" style="cursor: pointer;" onclick="showVarianceDrilldown('over')" title="Click to see overrunning accounts">
+        <div class="kpi-label">Over Running</div>
+        <div class="kpi-value" id="over-running">$0</div>
+    </div>
+    <div class="kpi-card under-budget" style="cursor: pointer;" onclick="showVarianceDrilldown('under')" title="Click to see underrunning accounts">
+        <div class="kpi-label">Under Running</div>
+        <div class="kpi-value" id="under-running">$0</div>
+    </div>
+</div>
+            
+            <div class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">Budget vs Actual</div>
+                        <div class="chart-actions">
+                            <button class="action-btn" onclick="getAIInsight('budget_vs_actual')">🤖 AI Insight</button>
+                            <button class="action-btn" onclick="zoomChart('budget_vs_actual')">🔍 Zoom</button>
+                            <button class="action-btn" onclick="exportChartData('budget_vs_actual')">📊 Export</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="budgetVsActualChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+    <div class="chart-header">
+        <div class="chart-title">Risk Distribution</div>
+        <div class="chart-actions">
+            <!-- Toggle Switch for Chart Type -->
+            <div class="chart-toggle-container">
+                <span class="toggle-label">Donut</span>
+                <label class="chart-toggle-switch">
+                    <input type="checkbox" id="risk-chart-toggle" onchange="toggleRiskChart()">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">Heatmap</span>
+            </div>
+            <button class="action-btn" onclick="getAIInsight('risk_distribution')">🤖 AI Insight</button>
+            <button class="action-btn" onclick="zoomChart('risk_distribution')">🔍 Zoom</button>
+            <button class="action-btn" onclick="exportChartData('risk_distribution')">📊 Export</button>
+        </div>
+    </div>
+    <div class="chart-wrapper">
+        <canvas id="riskDistributionChart"></canvas>
+        <div id="riskHeatmapChart" style="display: none;"></div>
+    </div>
+</div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">Variance Analysis</div>
+                        <div class="chart-actions">
+                            <button class="action-btn" onclick="getAIInsight('variance_analysis')">🤖 AI Insight</button>
+                            <button class="action-btn" onclick="zoomChart('variance_analysis')">🔍 Zoom</button>
+                            <button class="action-btn" onclick="exportChartData('variance_analysis')">📊 Export</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="varianceChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <div class="chart-title">Budget Forecast</div>
+                        <div class="chart-actions">
+                            <button class="action-btn" onclick="getAIInsight('forecast')">🤖 AI Insight</button>
+                            <button class="action-btn" onclick="zoomChart('forecast')">🔍 Zoom</button>
+                            <button class="action-btn" onclick="exportChartData('forecast')">📊 Export</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="forecastChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="full-width-section">
+            <div class="section-title">Risk Factor Summary</div>
+            <div id="risk-summary" class="loading">Loading risk data...</div>
+        </div>
+        
+        <div class="full-width-section">
+            <div class="section-title">Drilldown Data</div>
+            <div id="drilldown-data" class="loading">Loading detailed data...</div>
+        </div>
+    </div>
+    
+    <!-- AI Insight Panel -->
+    <div class="ai-insight-panel" id="ai-insight-panel">
+        <div class="ai-insight-header">
+            <h3>
+                <span>🤖</span>
+                <span>AI Insights</span>
+            </h3>
+            <div class="close-insight" onclick="closeAIInsight()">✕</div>
+        </div>
+        <div class="ai-insight-content" id="ai-insight-content">
+            <div class="ai-insight-loading">Loading insights...</div>
+        </div>
+    </div>
+    
+    <!-- Zoom Modal -->
+    <div class="zoom-modal" id="zoom-modal">
+        <div class="zoom-content">
+            <div class="zoom-header">
+                <div class="zoom-title" id="zoom-title">Chart</div>
+                <div class="close-zoom" onclick="closeZoom()">✕</div>
+            </div>
+            <div class="zoom-chart-wrapper">
+                <canvas id="zoomChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let budgetVsActualChart, riskDistributionChart, varianceChart, forecastChart, zoomedChart;
+        let notifications = [];
+        let currentChartData = {
+            budget_vs_actual: null,
+            risk_distribution: null,
+            variance_analysis: null,
+            forecast: null
+        };
+        
+        const chartTickColor = '#848d97';
+        const chartGridColor = '#30363d';
+        const chartLegendColor = '#e6edf3';
+        const chartTooltipBg = '#161b22';
+        
+        // Toggle Filters
+        function toggleFilters() {
+            const content = document.getElementById('filter-content');
+            const toggle = document.getElementById('filter-toggle');
+            content.classList.toggle('expanded');
+            toggle.classList.toggle('expanded');
+        }
+        
+        // Toggle Notifications
+        function toggleNotifications() {
+            const panel = document.getElementById('notification-panel');
+            panel.classList.toggle('active');
+        }
+        
+        // Close notifications when clicking outside
+        document.addEventListener('click', function(event) {
+            const panel = document.getElementById('notification-panel');
+            const btn = document.getElementById('notification-btn');
+            if (!btn.contains(event.target) && !panel.contains(event.target)) {
+                panel.classList.remove('active');
+            }
+        });
+        
+        // Generate Critical Notifications
+        function generateNotifications(data) {
+            notifications = [];
+            
+            if (data.over_running > 50000) {
+                notifications.push({
+                    type: 'critical',
+                    title: 'Critical Budget Overrun',
+                    message: `Total overrun of ${formatCurrency(data.over_running)} detected`,
+                    time: 'Just now'
+                });
+            }
+            
+            if (data.risk_distribution.Critical > 5) {
+                notifications.push({
+                    type: 'critical',
+                    title: 'High Risk Items',
+                    message: `${data.risk_distribution.Critical} accounts in critical risk status`,
+                    time: '5 mins ago'
+                });
+            }
+            
+            if (data.total_variance < -100000) {
+                notifications.push({
+                    type: 'warning',
+                    title: 'Large Variance Detected',
+                    message: `Total variance of ${formatCurrency(data.total_variance)}`,
+                    time: '15 mins ago'
+                });
+            }
+            
+            updateNotificationUI();
+        }
+        
+        function updateNotificationUI() {
+            const count = document.getElementById('notification-count');
+            const list = document.getElementById('notification-list');
+            
+            count.textContent = notifications.length;
+            count.style.display = notifications.length > 0 ? 'flex' : 'none';
+            
+            if (notifications.length === 0) {
+                list.innerHTML = '<div class="loading">No new notifications</div>';
+                return;
+            }
+            
+            list.innerHTML = notifications.map(notif => `
+                <div class="notification-item ${notif.type}">
+                    <div class="notification-title">
+                        ${notif.type === 'critical' ? '🔴' : '⚠️'}
+                        ${notif.title}
+                    </div>
+                    <div class="notification-message">${notif.message}</div>
+                    <div class="notification-time">${notif.time}</div>
+                </div>
+            `).join('');
+        }
+        
+        function clearAllNotifications() {
+            notifications = [];
+            updateNotificationUI();
+        }
+        
+        // AI Insight Functions
+        async function getAIInsight(chartType) {
+            const panel = document.getElementById('ai-insight-panel');
+            const content = document.getElementById('ai-insight-content');
+            
+            // Show panel with loading state
+            panel.classList.add('active');
+            content.innerHTML = '<div class="ai-insight-loading">Generating AI insights...</div>';
+            
+            const chartData = currentChartData[chartType];
+            
+            if (!chartData) {
+                content.innerHTML = '<div class="ai-insight-error">No data available for this chart</div>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/ai_insight', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chart_type: chartType,
+                        chart_data: chartData
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to get AI insight');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    content.innerHTML = `<div class="ai-insight-text">${result.insight}</div>`;
+                } else {
+                    content.innerHTML = `<div class="ai-insight-error">${result.insight}</div>`;
+                }
+            } catch (error) {
+                console.error('Error getting AI insight:', error);
+                content.innerHTML = '<div class="ai-insight-error">Failed to generate AI insights. Please try again.</div>';
+            }
+        }
+        
+        function closeAIInsight() {
+            const panel = document.getElementById('ai-insight-panel');
+            panel.classList.remove('active');
+        }
+       
+        // Zoom Chart Functions
+        function zoomChart(chartType) {
+    if (chartType === 'risk_distribution' && currentRiskView === 'heatmap') {
+        const modal = document.getElementById('zoom-modal');
+        const title = document.getElementById('zoom-title');
+        const chartWrapper = modal.querySelector('.zoom-chart-wrapper');
+        
+        title.textContent = 'Risk Distribution Heatmap (Detailed View)';
+        modal.classList.add('active');
+        
+        // Create larger heatmap in zoom view
+        chartWrapper.innerHTML = '<div id="zoom-heatmap" style="display: flex; align-items: center; justify-content: center; height: 100%;"></div>';
+        
+        if (riskHeatmapData) {
+            // Render heatmap in zoom container
+            const container = document.getElementById('zoom-heatmap');
+            const impacts = ['Catastrophic', 'Significant', 'Moderate', 'Low', 'Negligible'];
+            const likelihoods = ['Improbable', 'Remote', 'Occasional', 'Probable', 'Frequent'];
+            
+            const riskScores = {
+                'Catastrophic': [5, 10, 15, 20, 25],
+                'Significant': [4, 8, 12, 16, 20],
+                'Moderate': [3, 6, 9, 12, 15],
+                'Low': [2, 4, 6, 8, 10],
+                'Negligible': [1, 2, 3, 4, 5]
+            };
+            
+            function getColorClass(score) {
+                if (score >= 20) return 'heatmap-darkred';
+                if (score >= 12) return 'heatmap-red';
+                if (score >= 6) return 'heatmap-orange';
+                if (score >= 3) return 'heatmap-yellow';
+                return 'heatmap-green';
+            }
+            
+            let html = '<div class="heatmap-container" style="transform: scale(1.5);">';
+            
+            html += '<div class="heatmap-header">';
+            likelihoods.forEach(likelihood => {
+                html += `<div class="heatmap-header-cell">${likelihood}</div>`;
+            });
+            html += '</div>';
+            
+            impacts.forEach((impact, impactIdx) => {
+                html += '<div class="heatmap-row">';
+                html += `<div class="heatmap-label">${impact}</div>`;
+                
+                likelihoods.forEach((likelihood, likelihoodIdx) => {
+                    const count = riskHeatmapData[impact] ? (riskHeatmapData[impact][likelihood] || 0) : 0;
+                    const score = riskScores[impact][likelihoodIdx];
+                    const colorClass = getColorClass(score);
+                    
+                    html += `
+                        <div class="heatmap-cell ${colorClass}" 
+                             title="${impact} - ${likelihood}: ${count} items (Risk Score: ${score})">
+                            ${count > 0 ? count : ''}
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+            });
+            
+            html += `
+                <div class="heatmap-legend">
+                    <div class="legend-item">
+                        <div class="legend-color heatmap-green"></div>
+                        <span>Low Risk (1-2)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color heatmap-yellow"></div>
+                        <span>Medium Risk (3-5)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color heatmap-orange"></div>
+                        <span>High Risk (6-11)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color heatmap-red"></div>
+                        <span>Critical Risk (12-19)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color heatmap-darkred"></div>
+                        <span>Extreme Risk (20-25)</span>
+                    </div>
+                </div>
+            `;
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        return;
+    }
+    
+    // Original zoom code for other charts
+    const modal = document.getElementById('zoom-modal');
+    const title = document.getElementById('zoom-title');
+    
+    const titles = {
+        'budget_vs_actual': 'Budget vs Actual (Detailed View)',
+        'risk_distribution': 'Risk Distribution (Detailed View)',
+        'variance_analysis': 'Variance Analysis (Detailed View)',
+        'forecast': 'Budget Forecast (Detailed View)'
+    };
+    
+    title.textContent = titles[chartType] || 'Chart';
+    modal.classList.add('active');
+    
+    const ctx = document.getElementById('zoomChart').getContext('2d');
+    
+    if (zoomedChart) {
+        zoomedChart.destroy();
+    }
+    
+    const chartData = currentChartData[chartType];
+    
+    if (!chartData) {
+        return;
+    }
+    
+    switch(chartType) {
+        case 'budget_vs_actual':
+            zoomedChart = createBudgetVsActualChart(ctx, chartData, true);
+            break;
+        case 'risk_distribution':
+            zoomedChart = createRiskDistributionChart(ctx, chartData, true);
+            break;
+        case 'variance_analysis':
+            zoomedChart = createVarianceChart(ctx, chartData, true);
+            break;
+        case 'forecast':
+            zoomedChart = createForecastChart(ctx, chartData, true);
+            break;
+    }
+}
+        function closeZoom() {
+            const modal = document.getElementById('zoom-modal');
+            modal.classList.remove('active');
+            
+            if (zoomedChart) {
+                zoomedChart.destroy();
+                zoomedChart = null;
+            }
+        }
+        
+        // Export Chart Data
+        async function exportChartData(chartType) {
+            const button = event.target;
+            button.classList.add('loading');
+            button.disabled = true;
+            
+            const chartData = currentChartData[chartType];
+            
+            if (!chartData) {
+                alert('No data available to export');
+                button.classList.remove('loading');
+                button.disabled = false;
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/export_chart_data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chart_type: chartType,
+                        chart_data: chartData
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to export data');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Convert hex string back to binary
+                    const bytes = new Uint8Array(result.data.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+                    const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    
+                    // Create download link
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${chartType}_export_${new Date().getTime()}.xlsx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    alert('Failed to export data: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error exporting data:', error);
+                alert('Failed to export data. Please try again.');
+            } finally {
+                button.classList.remove('loading');
+                button.disabled = false;
+            }
+        }
+        
+        async function initializeDashboard() {
+            await loadCompanies();
+            await updateDashboard();
+        }
+        
+        async function loadCompanies() {
+            try {
+                const response = await fetch('/api/companies');
+                if (!response.ok) throw new Error('Failed to load companies');
+                const companies = await response.json();
+                
+                const select = document.getElementById('company-select');
+                companies.forEach(company => {
+                    const option = document.createElement('option');
+                    option.value = company;
+                    option.textContent = company;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading companies:', error);
+            }
+        }
+        
+        async function updateCostCodes() {
+            const company = document.getElementById('company-select').value;
+            try {
+                const response = await fetch(`/api/cost_codes?company=${encodeURIComponent(company)}`);
+                if (!response.ok) throw new Error('Failed to load cost codes');
+                const costCodes = await response.json();
+                
+                const select = document.getElementById('cost-code-select');
+                select.innerHTML = '<option value="">All Cost Codes</option>';
+                costCodes.forEach(code => {
+                    const option = document.createElement('option');
+                    option.value = code;
+                    option.textContent = code;
+                    select.appendChild(option);
+                });
+                
+                updateAccountDescriptions();
+            } catch (error) {
+                console.error('Error loading cost codes:', error);
+            }
+        }
+        
+        async function updateAccountDescriptions() {
+            const company = document.getElementById('company-select').value;
+            const costCode = document.getElementById('cost-code-select').value;
+            
+            try {
+                const response = await fetch(`/api/account_descriptions?company=${encodeURIComponent(company)}&cost_code=${encodeURIComponent(costCode)}`);
+                if (!response.ok) throw new Error('Failed to load account descriptions');
+                const accounts = await response.json();
+                
+                const select = document.getElementById('account-select');
+                select.innerHTML = '<option value="">All Accounts</option>';
+                accounts.forEach(account => {
+                    const option = document.createElement('option');
+                    option.value = account;
+                    option.textContent = account;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading account descriptions:', error);
+            }
+        }
+        
+        async function updateDashboard() {
+            const company = document.getElementById('company-select').value;
+            const costCode = document.getElementById('cost-code-select').value;
+            const accountDesc = document.getElementById('account-select').value;
+            
+            await updateKPIs(company, costCode, accountDesc);
+            await updateCharts(company, costCode, accountDesc);
+            await updateDrilldownData(company, costCode, accountDesc);
+        }
+        
+        async function updateKPIs(company, costCode, accountDesc) {
+            const params = new URLSearchParams();
+            if (company) params.append('company', company);
+            if (costCode) params.append('cost_code', costCode);
+            if (accountDesc) params.append('account_desc', accountDesc);
+            
+            try {
+                const response = await fetch(`/api/kpi_data?${params}`);
+                if (!response.ok) throw new Error('Failed to load KPI data');
+                const data = await response.json();
+                
+                document.getElementById('total-budget').textContent = formatCurrency(data.total_budget);
+                document.getElementById('total-actual').textContent = formatCurrency(data.total_actual);
+                document.getElementById('total-variance').textContent = formatCurrency(data.total_variance);
+                document.getElementById('over-running').textContent = formatCurrency(data.over_running);
+                document.getElementById('under-running').textContent = formatCurrency(data.under_running);
+                
+                updateRiskSummary(data.risk_distribution);
+                generateNotifications(data);
+            } catch (error) {
+                console.error('Error updating KPIs:', error);
+            }
+        }
+        
+      async function updateCharts(company, costCode, accountDesc) {
+    const params = new URLSearchParams();
+    if (company) params.append('company', company);
+    if (costCode) params.append('cost_code', costCode);
+    if (accountDesc) params.append('account_desc', accountDesc);
+    
+    try {
+        const chartResponse = await fetch(`/api/chart_data?${params}`);
+        if (!chartResponse.ok) throw new Error('Failed to load chart data');
+        const chartData = await chartResponse.json();
+        
+        const forecastResponse = await fetch(`/api/forecast_data?${params}`);
+        if (!forecastResponse.ok) throw new Error('Failed to load forecast data');
+        const forecastData = await forecastResponse.json();
+        
+        // Store chart data for AI insights, export, and chart interactions
+        currentChartData.budget_vs_actual = chartData.budget_vs_actual;
+        currentChartData.risk_distribution = chartData.risk_distribution;
+        currentChartData.variance_analysis = chartData.variance_analysis;
+        currentChartData.forecast = forecastData;
+        
+        // Update all charts
+        updateBudgetVsActualChart(chartData.budget_vs_actual);
+        updateRiskDistributionChart(chartData.risk_distribution);
+        updateVarianceChart(chartData.variance_analysis);
+        updateForecastChart(forecastData);
+    } catch (error) {
+        console.error('Error updating charts:', error);
+    }
+}
+
+        async function updateDrilldownData(company, costCode, accountDesc) {
+            const params = new URLSearchParams();
+            if (company) params.append('company', company);
+            if (costCode) params.append('cost_code', costCode);
+            if (accountDesc) params.append('account_desc', accountDesc);
+            
+            try {
+                const response = await fetch(`/api/drilldown_data?${params}`);
+                if (!response.ok) throw new Error('Failed to load drilldown data');
+                const data = await response.json();
+                
+                const container = document.getElementById('drilldown-data');
+                if (data.length === 0) {
+                    container.innerHTML = '<div class="loading">No data available for the selected filters</div>';
+                    return;
+                }
+                
+                let html = `
+                    <table class="drilldown-table">
+                        <thead>
+                            <tr>
+                                <th>Cost Code</th>
+                                <th>Account Description</th>
+                                <th>Budget</th>
+                                <th>Actual</th>
+                                <th>Variance</th>
+                                <th>Risk Factor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                data.forEach(item => {
+                    const statusClass = item.Budget_Status === 'Over Budget' ? 'status-over' : 
+                                      item.Budget_Status === 'Under Budget' ? 'status-under' : 'status-on';
+                    
+                    html += `
+                        <tr>
+                            <td>${item['Cost Code'] || 'N/A'}</td>
+                            <td>${item['Account Description'] || 'N/A'}</td>
+                            <td>${formatCurrency(item['Revised Budget Amt'])}</td>
+                            <td>${formatCurrency(item['Actual Amount'])}</td>
+                            <td>${formatCurrency(item['Budget Var Amount'])}</td>
+                            <td><span class="risk-badge risk-${item.Risk_Factor ? item.Risk_Factor.toLowerCase().replace(' ', '-') : 'no-budget'}">${item.Risk_Factor || 'No Budget'}</span></td>
+                            <td class="${statusClass}">${item.Budget_Status}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading drilldown data:', error);
+                document.getElementById('drilldown-data').innerHTML = '<div class="error">Failed to load detailed data</div>';
+            }
+        }
+        
+        function createBudgetVsActualChart(ctx, data, isZoomed = false) {
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.accounts,
+                    datasets: [
+                        {
+                            label: 'Budget',
+                            data: data.budget,
+                            backgroundColor: 'rgba(56, 139, 253, 0.7)',
+                            borderColor: '#388bfd',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Actual',
+                            data: data.actual,
+                            backgroundColor: 'rgba(63, 185, 80, 0.7)',
+                            borderColor: '#3fb950',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                color: chartTickColor,
+                                font: { size: isZoomed ? 12 : 10 }
+                            },
+                            grid: {
+                                color: chartGridColor
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: chartTickColor,
+                                font: { size: isZoomed ? 11 : 9 },
+                                maxRotation: 45,
+                                minRotation: 45
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: chartLegendColor,
+                                font: { size: isZoomed ? 12 : 10 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: chartTooltipBg,
+                            borderColor: chartGridColor,
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += formatCurrency(context.parsed.y);
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateBudgetVsActualChart(data) {
+            const ctx = document.getElementById('budgetVsActualChart').getContext('2d');
+            
+            if (budgetVsActualChart) {
+                budgetVsActualChart.destroy();
+            }
+            
+            if (!data.accounts || data.accounts.length === 0) {
+                return;
+            }
+            
+            // Limit to top 6 for regular view
+            const limitedData = {
+                accounts: data.accounts.slice(0, 6),
+                budget: data.budget.slice(0, 6),
+                actual: data.actual.slice(0, 6)
+            };
+            
+            budgetVsActualChart = createBudgetVsActualChart(ctx, limitedData);
+        }
+        
+        function createRiskDistributionChart(ctx, data, isZoomed = false) {
+            const backgroundColors = data.labels.map(label => {
+                switch(label) {
+                    case 'Low': return '#3fb950';
+                    case 'Medium': return '#e3b341';
+                    case 'Critical': return '#f85149';
+                    case 'No Budget': return '#6e7681';
+                    default: return '#6e7681';
+                }
+            });
+            
+            return new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.data,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 3,
+                        borderColor: '#161b22'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: chartLegendColor,
+                                font: { size: isZoomed ? 14 : 10 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: chartTooltipBg,
+                            borderColor: chartGridColor,
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
+        }
+        
+// Update the existing updateRiskDistributionChart function
+function updateRiskDistributionChart(data) {
+    // Store the matrix data for heatmap
+    if (data.matrix) {
+        riskHeatmapData = data.matrix;
+    }
+    
+    if (currentRiskView === 'heatmap' && riskHeatmapData) {
+        renderRiskHeatmap(riskHeatmapData);
+        return;
+    }
+    
+    // Original donut chart code
+    const ctx = document.getElementById('riskDistributionChart').getContext('2d');
+    
+    if (riskDistributionChart) {
+        riskDistributionChart.destroy();
+    }
+    
+    if (!data.labels || data.labels.length === 0) {
+        return;
+    }
+    
+    riskDistributionChart = createRiskDistributionChart(ctx, data);
+}
+
+      // Variance Drilldown Functions
+async function showVarianceDrilldown(type) {
+    const modal = document.getElementById('drilldown-modal');
+    const title = document.getElementById('drilldown-title');
+    const content = document.getElementById('drilldown-modal-content');
+    
+    const titles = {
+        'all': 'All Variance Accounts',
+        'over': 'Over Running Accounts',
+        'under': 'Under Running Accounts'
+    };
+    
+    title.textContent = titles[type] || 'Variance Details';
+    modal.classList.add('active');
+    content.innerHTML = '<div class="loading">Loading details...</div>';
+    
+    // Get current filters
+    const company = document.getElementById('company-select').value;
+    const costCode = document.getElementById('cost-code-select').value;
+    const accountDesc = document.getElementById('account-select').value;
+    
+    const params = new URLSearchParams();
+    if (company) params.append('company', company);
+    if (costCode) params.append('cost_code', costCode);
+    if (accountDesc) params.append('account_desc', accountDesc);
+    params.append('type', type);
+    
+    try {
+        const response = await fetch(`/api/variance_drilldown?${params}`);
+        if (!response.ok) throw new Error('Failed to load variance details');
+        const data = await response.json();
+        
+        if (data.length === 0) {
+            content.innerHTML = '<div class="loading">No data available for this selection</div>';
+            return;
+        }
+        
+        let html = `
+            <table class="drilldown-table">
+                <thead>
+                    <tr>
+                        <th>Cost Code</th>
+                        <th>Account Description</th>
+                        <th>Budget</th>
+                        <th>Actual</th>
+                        <th>Variance</th>
+                        <th>% Complete</th>
+                        <th>Risk Factor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+        
+        data.forEach(item => {
+            const statusClass = item.Budget_Status === 'Over Budget' ? 'status-over' : 
+                              item.Budget_Status === 'Under Budget' ? 'status-under' : 'status-on';
+            
+            const varianceClass = item['Budget Var Amount'] < 0 ? 'status-over' : 'status-under';
+            
+            html += `
+                <tr style="cursor: pointer;" onclick="showAccountDetail('${item['Account Description']}')">
+                    <td>${item['Cost Code'] || 'N/A'}</td>
+                    <td>${item['Account Description'] || 'N/A'}</td>
+                    <td>${formatCurrency(item['Revised Budget Amt'])}</td>
+                    <td>${formatCurrency(item['Actual Amount'])}</td>
+                    <td class="${varianceClass}">${formatCurrency(item['Budget Var Amount'])}</td>
+                    <td>${Math.round(item['Percent Complete'] || 0)}%</td>
+                    <td><span class="risk-badge risk-${item.Risk_Factor ? item.Risk_Factor.toLowerCase().replace(' ', '-') : 'no-budget'}">${item.Risk_Factor || 'No Budget'}</span></td>
+                    <td class="${statusClass}">${item.Budget_Status}</td>
+                </tr>
+            `;
+        });
+        
+        html += '</tbody></table>';
+        
+        // Add summary at the top
+        const totalVariance = data.reduce((sum, item) => sum + item['Budget Var Amount'], 0);
+        const totalBudget = data.reduce((sum, item) => sum + item['Revised Budget Amt'], 0);
+        const totalActual = data.reduce((sum, item) => sum + item['Actual Amount'], 0);
+        
+        const summary = `
+            <div style="background: var(--primary-bg); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                <div>
+                    <div style="color: var(--text-secondary); font-size: 0.8rem;">Total Records</div>
+                    <div style="font-size: 1.25rem; font-weight: 600;">${data.length}</div>
+                </div>
+                <div>
+                    <div style="color: var(--text-secondary); font-size: 0.8rem;">Total Budget</div>
+                    <div style="font-size: 1.25rem; font-weight: 600;">${formatCurrency(totalBudget)}</div>
+                </div>
+                <div>
+                    <div style="color: var(--text-secondary); font-size: 0.8rem;">Total Actual</div>
+                    <div style="font-size: 1.25rem; font-weight: 600;">${formatCurrency(totalActual)}</div>
+                </div>
+                <div>
+                    <div style="color: var(--text-secondary); font-size: 0.8rem;">Total Variance</div>
+                    <div style="font-size: 1.25rem; font-weight: 600; color: ${totalVariance < 0 ? 'var(--accent-red)' : 'var(--accent-green)'};">${formatCurrency(totalVariance)}</div>
+                </div>
+            </div>
+        `;
+        
+        content.innerHTML = summary + html;
+        
+    } catch (error) {
+        console.error('Error loading variance details:', error);
+        content.innerHTML = '<div class="error">Failed to load details. Please try again.</div>';
+    }
+}
+
+async function showAccountDetail(accountName) {
+    const content = document.getElementById('drilldown-modal-content');
+    const title = document.getElementById('drilldown-title');
+    
+    title.textContent = `Account Details: ${accountName}`;
+    content.innerHTML = '<div class="loading">Loading account details...</div>';
+    
+    const company = document.getElementById('company-select').value;
+    const costCode = document.getElementById('cost-code-select').value;
+    
+    const params = new URLSearchParams();
+    if (company) params.append('company', company);
+    if (costCode) params.append('cost_code', costCode);
+    params.append('account', accountName);
+    
+    try {
+        const response = await fetch(`/api/account_variance_detail?${params}`);
+        if (!response.ok) throw new Error('Failed to load account details');
+        const data = await response.json();
+        
+        if (data.length === 0) {
+            content.innerHTML = '<div class="loading">No detailed data available</div>';
+            return;
+        }
+        
+        // Show detailed information in a nice format
+        let html = `
+            <div style="background: var(--primary-bg); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">${accountName}</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        `;
+        
+        const item = data[0]; // Get first record for summary
+        
+        const fields = [
+            { label: 'Cost Code', value: item['Cost Code'] },
+            { label: 'Cost Type', value: item['Cost Type'] },
+            { label: 'Company', value: item['Company Description'] },
+            { label: 'Original Budget', value: formatCurrency(item['Original Budget Amt']) },
+            { label: 'Change Orders', value: formatCurrency(item['Change Order Amt']) },
+            { label: 'Revised Budget', value: formatCurrency(item['Revised Budget Amt']) },
+            { label: 'Actual Amount', value: formatCurrency(item['Actual Amount']) },
+            { label: 'Open Commitments', value: formatCurrency(item['Open Commit Amount']) },
+            { label: 'Estimate at Completion', value: formatCurrency(item['Estimate At Comp. Amt']) },
+            { label: 'Budget Variance', value: formatCurrency(item['Budget Var Amount']), isVariance: true },
+            { label: 'Percent Complete', value: Math.round(item['Percent Complete'] || 0) + '%' },
+            { label: 'Risk Factor', value: item['Risk_Factor'], isRisk: true },
+            { label: 'Status', value: item['Budget_Status'], isStatus: true }
+        ];
+        
+        fields.forEach(field => {
+            let valueStyle = 'font-weight: 600; font-size: 1.1rem;';
+            if (field.isVariance && item['Budget Var Amount'] < 0) {
+                valueStyle += ' color: var(--accent-red);';
+            } else if (field.isVariance && item['Budget Var Amount'] > 0) {
+                valueStyle += ' color: var(--accent-green);';
+            }
+            
+            let valueContent = field.value;
+            if (field.isRisk) {
+                valueContent = `<span class="risk-badge risk-${field.value ? field.value.toLowerCase().replace(' ', '-') : 'no-budget'}">${field.value || 'No Budget'}</span>`;
+            } else if (field.isStatus) {
+                const statusClass = field.value === 'Over Budget' ? 'status-over' : 
+                                  field.value === 'Under Budget' ? 'status-under' : 'status-on';
+                valueContent = `<span class="${statusClass}">${field.value}</span>`;
+            }
+            
+            html += `
+                <div>
+                    <div style="color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 0.25rem;">${field.label}</div>
+                    <div style="${valueStyle}">${valueContent}</div>
+                </div>
+            `;
+        });
+        
+        html += `
+                </div>
+            </div>
+            <button onclick="showVarianceDrilldown('all')" style="margin-top: 1rem; padding: 0.75rem 1.5rem;">← Back to List</button>
+        `;
+        
+        content.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Error loading account details:', error);
+        content.innerHTML = '<div class="error">Failed to load account details. Please try again.</div>';
+    }
+}
+
+function closeDrilldownModal() {
+    const modal = document.getElementById('drilldown-modal');
+    modal.classList.remove('active');
+}
+
+// Add to existing closeZoom function or create if it doesn't exist
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeZoom();
+        closeAIInsight();
+        closeDrilldownModal();
+    }
+});
+
+ function createVarianceChart(ctx, data, isZoomed = false) {
+            const backgroundColors = data.variances.map(value => 
+                value < 0 ? '#f85149' : '#3fb950'
+            );
+            
+            const displayData = isZoomed ? data : {
+                accounts: data.accounts.slice(0, 8),
+                variances: data.variances.slice(0, 8)
+            };
+            
+            const displayColors = isZoomed ? backgroundColors : backgroundColors.slice(0, 8);
+            
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: displayData.accounts,
+                    datasets: [{
+                        label: 'Variance',
+                        data: displayData.variances,
+                        backgroundColor: displayColors
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                color: chartTickColor,
+                                font: { size: isZoomed ? 12 : 10 }
+                            },
+                            grid: {
+                                color: chartGridColor
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: chartTickColor,
+                                font: { size: isZoomed ? 11 : 9 }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: chartTooltipBg,
+                            borderColor: chartGridColor,
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Variance: ' + formatCurrency(context.parsed.x);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+ 
+       function updateVarianceChart(data) {
+    const ctx = document.getElementById('varianceChart').getContext('2d');
+    
+    if (varianceChart) {
+        varianceChart.destroy();
+    }
+    
+    if (!data.accounts || data.accounts.length === 0) {
+        return;
+    }
+    
+    // Store full data for chart interactions
+    const fullData = {
+        accounts: data.accounts,
+        variances: data.variances
+    };
+    
+    varianceChart = createVarianceChart(ctx, fullData, false);
+}
+        
+        function createForecastChart(ctx, data, isZoomed = false) {
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.months,
+                    datasets: [
+                        {
+                            label: 'Budget',
+                            data: data.budget_forecast,
+                            borderColor: '#388bfd',
+                            backgroundColor: 'rgba(56, 139, 253, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Actual',
+                            data: data.actual_forecast,
+                            borderColor: '#3fb950',
+                            backgroundColor: 'rgba(63, 185, 80, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                },
+                                color: chartTickColor,
+                                font: { size: isZoomed ? 12 : 10 }
+                            },
+                            grid: {
+                                color: chartGridColor
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: chartTickColor,
+                                font: { size: isZoomed ? 12 : 10 }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: chartLegendColor,
+                                font: { size: isZoomed ? 12 : 10 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: chartTooltipBg,
+                            borderColor: chartGridColor,
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+       
+function updateForecastChart(data) {
+    const ctx = document.getElementById('forecastChart').getContext('2d');
+    
+    if (forecastChart) {
+        forecastChart.destroy();
+    }
+    
+    if (!data.months || data.months.length === 0) {
+        return;
+    }
+    
+    forecastChart = createForecastChart(ctx, data, false);
+}
+        
+        function updateRiskSummary(riskDistribution) {
+            const container = document.getElementById('risk-summary');
+            
+            if (!riskDistribution || Object.keys(riskDistribution).length === 0) {
+                container.innerHTML = '<div class="loading">No risk data available</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            for (const [risk, count] of Object.entries(riskDistribution)) {
+                const badge = document.createElement('span');
+                badge.className = `risk-badge risk-${risk.toLowerCase().replace(' ', '-')}`;
+                badge.textContent = `${risk}: ${count}`;
+                container.appendChild(badge);
+            }
+        }
+        
+        function formatCurrency(amount) {
+            if (amount === null || amount === undefined) return '$0';
+            
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+        
+        // Close zoom modal on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeZoom();
+                closeAIInsight();
+            }
+        });
+        
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+
+        // Variance Drilldown Functions
+async function showVarianceDrilldown(type) {
+    const modal = document.getElementById('drilldown-modal');
+    const title = document.getElementById('drilldown-title');
+    const content = document.getElementById('drilldown-modal-content');
+    
+    const titles = {
+        'all': 'All Variance Accounts',
+        'over': 'Over Running Accounts',
+        'under': 'Under Running Accounts'
+    };
+    
+    title.textContent = titles[type] || 'Variance Details';
+    modal.classList.add('active');
+    content.innerHTML = '<div class="loading">Loading details...</div>';
+    
+    // Get current filters
+    const company = document.getElementById('company-select').value;
+    const costCode = document.getElementById('cost-code-select').value;
+    const accountDesc = document.getElementById('account-select').value;
+    
+    const params = new URLSearchParams();
+    if (company) params.append('company', company);
+    if (costCode) params.append('cost_code', costCode);
+    if (accountDesc) params.append('account_desc', accountDesc);
+    params.append('type', type);
+    
+    try {
+        const response = await fetch(`/api/variance_drilldown?${params}`);
+        if (!response.ok) throw new Error('Failed to load variance details');
+        const data = await response.json();
+        
+        if (data.length === 0) {
+            content.innerHTML = '<div class="loading">No data available for this selection</div>';
+            return;
+        }
+        
+        let html = `
+            <table class="drilldown-table">
+                <thead>
+                    <tr>
+                        <th>Cost Code</th>
+                        <th>Account Description</th>
+                        <th>Budget</th>
+                        <th>Actual</th>
+                        <th>Variance</th>
+                        <th>% Complete</th>
+                        <th>Risk Factor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+        
+        data.forEach(item => {
+            const statusClass = item.Budget_Status === 'Over Budget' ? 'status-over' : 
+                              item.Budget_Status === 'Under Budget' ? 'status-under' : 'status-on';
+            
+            const varianceClass = item['Budget Var Amount'] < 0 ? 'status-over' : 'status-under';
+            
+            html += `
+                <tr style="cursor: pointer;" onclick="showAccountDetail('${item['Account Description']}')">
+                    <td>${item['Cost Code'] || 'N/A'}</td>
+                    <td>${item['Account Description'] || 'N/A'}</td>
+                    <td>${formatCurrency(item['Revised Budget Amt'])}</td>
+                    <td>${formatCurrency(item['Actual Amount'])}</td>
+                    <td class="${varianceClass}">${formatCurrency(item['Budget Var Amount'])}</td>
+                    <td>${Math.round(item['Percent Complete'] || 0)}%</td>
+                    <td><span class="risk-badge risk-${item.Risk_Factor ? item.Risk_Factor.toLowerCase().replace(' ', '-') : 'no-budget'}">${item.Risk_Factor || 'No Budget'}</span></td>
+                    <td class="${statusClass}">${item.Budget_Status}</td>
+                </tr>
+            `;
+        });
+        
+        html += '</tbody></table>';
+        
+        // Add summary at the top
+        const totalVariance = data.reduce((sum, item) => sum + item['Budget Var Amount'], 0);
+        const totalBudget = data.reduce((sum, item) => sum + item['Revised Budget Amt'], 0);
+        const totalActual = data.reduce((sum, item) => sum + item['Actual Amount'], 0);
+        
+        const summary = `
+            <div style="background: var(--primary-bg); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                <div>
+                    <div style="color: var(--text-secondary); font-size: 0.8rem;">Total Records</div>
+                    <div style="font-size: 1.25rem; font-weight: 600;">${data.length}</div>
+                </div>
+                <div>
+                    <div style="color: var(--text-secondary); font-size: 0.8rem;">Total Budget</div>
+                    <div style="font-size: 1.25rem; font-weight: 600;">${formatCurrency(totalBudget)}</div>
+                </div>
+                <div>
+                    <div style="color: var(--text-secondary); font-size: 0.8rem;">Total Actual</div>
+                    <div style="font-size: 1.25rem; font-weight: 600;">${formatCurrency(totalActual)}</div>
+                </div>
+                <div>
+                    <div style="color: var(--text-secondary); font-size: 0.8rem;">Total Variance</div>
+                    <div style="font-size: 1.25rem; font-weight: 600; color: ${totalVariance < 0 ? 'var(--accent-red)' : 'var(--accent-green)'};">${formatCurrency(totalVariance)}</div>
+                </div>
+            </div>
+        `;
+        
+        content.innerHTML = summary + html;
+        
+    } catch (error) {
+        console.error('Error loading variance details:', error);
+        content.innerHTML = '<div class="error">Failed to load details. Please try again.</div>';
+    }
+}
+
+async function showAccountDetail(accountName) {
+    const content = document.getElementById('drilldown-modal-content');
+    const title = document.getElementById('drilldown-title');
+    
+    title.textContent = `Account Details: ${accountName}`;
+    content.innerHTML = '<div class="loading">Loading account details...</div>';
+    
+    const company = document.getElementById('company-select').value;
+    const costCode = document.getElementById('cost-code-select').value;
+    
+    const params = new URLSearchParams();
+    if (company) params.append('company', company);
+    if (costCode) params.append('cost_code', costCode);
+    params.append('account', accountName);
+    
+    try {
+        const response = await fetch(`/api/account_variance_detail?${params}`);
+        if (!response.ok) throw new Error('Failed to load account details');
+        const data = await response.json();
+        
+        if (data.length === 0) {
+            content.innerHTML = '<div class="loading">No detailed data available</div>';
+            return;
+        }
+        
+        // Show detailed information in a nice format
+        let html = `
+            <div style="background: var(--primary-bg); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">${accountName}</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        `;
+        
+        const item = data[0]; // Get first record for summary
+        
+        const fields = [
+            { label: 'Cost Code', value: item['Cost Code'] },
+            { label: 'Cost Type', value: item['Cost Type'] },
+            { label: 'Company', value: item['Company Description'] },
+            { label: 'Original Budget', value: formatCurrency(item['Original Budget Amt']) },
+            { label: 'Change Orders', value: formatCurrency(item['Change Order Amt']) },
+            { label: 'Revised Budget', value: formatCurrency(item['Revised Budget Amt']) },
+            { label: 'Actual Amount', value: formatCurrency(item['Actual Amount']) },
+            { label: 'Open Commitments', value: formatCurrency(item['Open Commit Amount']) },
+            { label: 'Estimate at Completion', value: formatCurrency(item['Estimate At Comp. Amt']) },
+            { label: 'Budget Variance', value: formatCurrency(item['Budget Var Amount']), isVariance: true },
+            { label: 'Percent Complete', value: Math.round(item['Percent Complete'] || 0) + '%' },
+            { label: 'Risk Factor', value: item['Risk_Factor'], isRisk: true },
+            { label: 'Status', value: item['Budget_Status'], isStatus: true }
+        ];
+        
+        fields.forEach(field => {
+            let valueStyle = 'font-weight: 600; font-size: 1.1rem;';
+            if (field.isVariance && item['Budget Var Amount'] < 0) {
+                valueStyle += ' color: var(--accent-red);';
+            } else if (field.isVariance && item['Budget Var Amount'] > 0) {
+                valueStyle += ' color: var(--accent-green);';
+            }
+            
+            let valueContent = field.value;
+            if (field.isRisk) {
+                valueContent = `<span class="risk-badge risk-${field.value ? field.value.toLowerCase().replace(' ', '-') : 'no-budget'}">${field.value || 'No Budget'}</span>`;
+            } else if (field.isStatus) {
+                const statusClass = field.value === 'Over Budget' ? 'status-over' : 
+                                  field.value === 'Under Budget' ? 'status-under' : 'status-on';
+                valueContent = `<span class="${statusClass}">${field.value}</span>`;
+            }
+            
+            html += `
+                <div>
+                    <div style="color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 0.25rem;">${field.label}</div>
+                    <div style="${valueStyle}">${valueContent}</div>
+                </div>
+            `;
+        });
+        
+        html += `
+                </div>
+            </div>
+            <button onclick="showVarianceDrilldown('all')" style="margin-top: 1rem; padding: 0.75rem 1.5rem;">← Back to List</button>
+        `;
+        
+        content.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Error loading account details:', error);
+        content.innerHTML = '<div class="error">Failed to load account details. Please try again.</div>';
+    }
+}
+
+function closeDrilldownModal() {
+    const modal = document.getElementById('drilldown-modal');
+    modal.classList.remove('active');
+}
+
+// Add to existing closeZoom function or create if it doesn't exist
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeZoom();
+        closeAIInsight();
+        closeDrilldownModal();
+    }
+});
+let currentRiskView = 'donut'; // Track current view
+let riskHeatmapData = null; // Store heatmap data
+
+// Toggle between donut and heatmap
+function toggleRiskChart() {
+    const toggle = document.getElementById('risk-chart-toggle');
+    const canvas = document.getElementById('riskDistributionChart');
+    const heatmap = document.getElementById('riskHeatmapChart');
+    
+    if (toggle.checked) {
+        // Show heatmap
+        currentRiskView = 'heatmap';
+        canvas.style.display = 'none';
+        heatmap.style.display = 'flex';
+        
+        if (riskHeatmapData) {
+            renderRiskHeatmap(riskHeatmapData);
+        }
+    } else {
+        // Show donut
+        currentRiskView = 'donut';
+        canvas.style.display = 'block';
+        heatmap.style.display = 'none';
+    }
+}
+
+// Render risk heatmap
+function renderRiskHeatmap(matrixData) {
+    const container = document.getElementById('riskHeatmapChart');
+    
+    const impacts = ['Catastrophic', 'Significant', 'Moderate', 'Low', 'Negligible'];
+    const likelihoods = ['Improbable', 'Remote', 'Occasional', 'Probable', 'Frequent'];
+    
+    // Risk scoring matrix
+    const riskScores = {
+        'Catastrophic': [5, 10, 15, 20, 25],
+        'Significant': [4, 8, 12, 16, 20],
+        'Moderate': [3, 6, 9, 12, 15],
+        'Low': [2, 4, 6, 8, 10],
+        'Negligible': [1, 2, 3, 4, 5]
+    };
+    
+    // Get color based on score
+    function getColorClass(score) {
+        if (score >= 20) return 'heatmap-darkred';
+        if (score >= 12) return 'heatmap-red';
+        if (score >= 6) return 'heatmap-orange';
+        if (score >= 3) return 'heatmap-yellow';
+        return 'heatmap-green';
+    }
+    
+    let html = '<div class="heatmap-container">';
+    
+    // Header row
+    html += '<div class="heatmap-header">';
+    likelihoods.forEach(likelihood => {
+        html += `<div class="heatmap-header-cell">${likelihood}</div>`;
+    });
+    html += '</div>';
+    
+    // Data rows
+    impacts.forEach((impact, impactIdx) => {
+        html += '<div class="heatmap-row">';
+        html += `<div class="heatmap-label">${impact}</div>`;
+        
+        likelihoods.forEach((likelihood, likelihoodIdx) => {
+            const count = matrixData[impact] ? (matrixData[impact][likelihood] || 0) : 0;
+            const score = riskScores[impact][likelihoodIdx];
+            const colorClass = getColorClass(score);
+            
+            html += `
+                <div class="heatmap-cell ${colorClass}" 
+                     title="${impact} - ${likelihood}: ${count} items (Risk Score: ${score})"
+                     onclick="showRiskDetails('${impact}', '${likelihood}')">
+                    ${count > 0 ? count : ''}
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+    });
+    
+    // Legend
+    html += `
+        <div class="heatmap-legend">
+            <div class="legend-item">
+                <div class="legend-color heatmap-green"></div>
+                <span>Low Risk (1-2)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color heatmap-yellow"></div>
+                <span>Medium Risk (3-5)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color heatmap-orange"></div>
+                <span>High Risk (6-11)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color heatmap-red"></div>
+                <span>Critical Risk (12-19)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color heatmap-darkred"></div>
+                <span>Extreme Risk (20-25)</span>
+            </div>
+        </div>
+    `;
+    
+    html += '</div>';
+    
+    container.innerHTML = html;
+}
+
+// Show details for a specific risk cell
+function showRiskDetails(impact, likelihood) {
+    alert(`Risk Details:\nImpact: ${impact}\nLikelihood: ${likelihood}\n\nClick OK to see detailed account information.`);
+    // You can expand this to show a modal with filtered account data
+}
+    </script>
+    <!-- Drilldown Modal -->
+<div class="zoom-modal" id="drilldown-modal">
+    <div class="zoom-content">
+        <div class="zoom-header">
+            <div class="zoom-title" id="drilldown-title">Details</div>
+            <div class="close-zoom" onclick="closeDrilldownModal()">✕</div>
+        </div>
+        <div style="height: calc(100% - 60px); overflow-y: auto; padding: 1rem;">
+            <div id="drilldown-modal-content"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

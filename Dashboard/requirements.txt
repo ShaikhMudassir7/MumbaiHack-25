@@ -1,1 +1,6 @@
-
+Flask
+pandas
+numpy
+openpyxl
+oci
+xlsxwriter
