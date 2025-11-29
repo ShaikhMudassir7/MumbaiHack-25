@@ -1,0 +1,14 @@
+Flask
+PyMuPDF==1.23.3
+pytesseract
+pdfminer.six
+pdfplumber
+Pillow
+python-dotenv
+requests
+pandas
+openpyxl
+psutil
+numpy
+XlsxWriter
+Werkzeug

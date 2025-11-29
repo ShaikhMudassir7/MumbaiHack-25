@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JDE Jobs Dashboard - All Projects</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #4cc9f0;
+            --success: #3a9e5f;
+            --warning: #f7b32b;
+            --danger: #e63946;
+            --light: #f8f9fa;
+            --dark: #2b2d42;
+            --gray: #8d99ae;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --card-gradient: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            --header-gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+        }
+        
+        body {
+            background: var(--bg-gradient);
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--dark);
+            min-height: 100vh;
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        .page-header {
+            background: var(--header-gradient);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(67, 97, 238, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        .page-header h1 {
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .page-header p {
+            opacity: 0.9;
+            margin-bottom: 0;
+            font-size: 1.1rem;
+        }
+        
+        .stats-row {
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--card-gradient);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+        
+        .stat-card.primary::before {
+            background: var(--primary);
+        }
+        
+        .stat-card.danger::before {
+            background: var(--danger);
+        }
+        
+        .stat-card.success::before {
+            background: var(--success);
+        }
+        
+        .stat-card.warning::before {
+            background: var(--warning);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h6 {
+            color: var(--gray);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-card h2 {
+            color: var(--dark);
+            font-weight: 700;
+            margin-bottom: 0;
+            font-size: 2.2rem;
+        }
+        
+        .stat-card .icon {
+            font-size: 2.5rem;
+            opacity: 0.2;
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover .icon {
+            opacity: 0.3;
+            transform: scale(1.1);
+        }
+        
+        .jobs-table-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: none;
+        }
+        
+        .card-header {
+            background: var(--header-gradient);
+            border-bottom: none;
+            padding: 20px 30px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .table {
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .table thead th {
+            background-color: #f8f9fa;
+            color: var(--dark);
+            font-weight: 600;
+            border-top: 1px solid #e3e6f0;
+            padding: 18px 15px;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e3e6f0;
+        }
+        
+        .table tbody td {
+            padding: 18px 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.03);
+            transform: scale(1.002);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .job-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .job-number {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        .badge-status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-over {
+            background-color: rgba(230, 57, 70, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(230, 57, 70, 0.2);
+        }
+        
+        .badge-under {
+            background-color: rgba(58, 158, 95, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(58, 158, 95, 0.2);
+        }
+        
+        .badge-on {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+        
+        .progress {
+            height: 10px;
+            border-radius: 10px;
+            background-color: #e9ecef;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            border-radius: 10px;
+        }
+        
+        .btn-details {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            background: var(--primary);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        
+        .risk-critical {
+            background-color: var(--danger);
+            box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.2);
+        }
+        
+        .risk-medium {
+            background-color: var(--warning);
+            box-shadow: 0 0 0 2px rgba(247, 179, 43, 0.2);
+        }
+        
+        .risk-low {
+            background-color: var(--success);
+            box-shadow: 0 0 0 2px rgba(58, 158, 95, 0.2);
+        }
+        
+        .loading-container {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border-width: 0.3em;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--gray);
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+        
+        .filter-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: none;
+        }
+        
+        .search-box {
+            border-radius: 12px;
+            border: 1px solid #e3e6f0;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .search-box:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.15);
+            background: white;
+        }
+        
+        .amount-cell {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .amount-negative {
+            color: var(--danger);
+        }
+        
+        .amount-positive {
+            color: var(--success);
+        }
+        
+        .form-select {
+            border-radius: 12px;
+            padding: 12px 20px;
+            border: 1px solid #e3e6f0;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.15);
+            background: white;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn-light {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 12px;
+            padding: 12px 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-light:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .trend-indicator {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.875rem;
+            margin-left: 8px;
+        }
+        
+        .trend-up {
+            color: var(--success);
+        }
+        
+        .trend-down {
+            color: var(--danger);
+        }
+        
+        .stat-change {
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .stat-card h2 {
+                font-size: 1.8rem;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 20px;
+            }
+            
+            .btn-light {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h1><i class="fas fa-file-invoice-dollar me-3"></i>Invoice Processing Dashboard</h1>
+            <p>Analyze and Compare Multiple Extracted Invoices</p>
+        </div>
+        <div class="col-md-4">
+            <div class="header-actions">
+                <button class="btn btn-light" onclick="refreshData()">
+                    <i class="fas fa-sync-alt me-2"></i>Refresh Data
+                </button>
+                <button class="btn btn-light" onclick="exportData()">
+                    <i class="fas fa-download me-2"></i>Export Report
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+        
+        <!-- Statistics Row -->
+       <div class="stats-row">
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card primary">
+                <i class="fas fa-file-invoice icon"></i>
+                <h6>Total Invoices</h6>
+                <h2 id="totalInvoices">0</h2>
+                <div class="trend-indicator trend-up">
+                    <i class="fas fa-arrow-up"></i>
+                    <span class="stat-change" id="invoicesChange">+0%</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card success">
+                <i class="fas fa-money-bill-wave icon"></i>
+                <h6>Total Amount</h6>
+                <h2 id="totalAmount">$0</h2>
+                <div class="trend-indicator trend-up">
+                    <i class="fas fa-arrow-up"></i>
+                    <span class="stat-change" id="amountChange">+0%</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card warning">
+                <i class="fas fa-percentage icon"></i>
+                <h6>Total GST</h6>
+                <h2 id="totalGST">$0</h2>
+                <div class="trend-indicator trend-up">
+                    <i class="fas fa-arrow-up"></i>
+                    <span class="stat-change" id="gstChange">+0%</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="stat-card danger">
+                <i class="fas fa-boxes icon"></i>
+                <h6>Total Line Items</h6>
+                <h2 id="totalLineItems">0</h2>
+                <div class="trend-indicator trend-up">
+                    <i class="fas fa-arrow-up"></i>
+                    <span class="stat-change" id="itemsChange">+0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        
+        <!-- Filter Section -->
+        <div class="filter-section">
+    <div class="row align-items-center">
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="fas fa-search"></i></span>
+                <input type="text" class="form-control search-box" id="searchInput" placeholder="Search by invoice number, vendor...">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" id="docTypeFilter">
+                <option value="">All Document Types</option>
+                <option value="INV">Invoices</option>
+                <option value="CN">Credit Notes</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" id="amountFilter">
+                <option value="">All Amounts</option>
+                <option value="high">High Value (>$10,000)</option>
+                <option value="medium">Medium Value ($1,000-$10,000)</option>
+                <option value="low">Low Value (<$1,000)</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-select" id="sortBy">
+                <option value="amount">Sort by Amount</option>
+                <option value="date">Sort by Date</option>
+                <option value="vendor">Sort by Vendor</option>
+                <option value="items">Sort by Line Items</option>
+            </select>
+        </div>
+    </div>
+</div>
+        
+        <!-- Jobs Table -->
+        <div class="jobs-table-card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-table me-2"></i>All Projects - Financial Overview</h5>
+                    <span class="badge bg-light text-dark" id="jobCount">0 Jobs</span>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div id="loadingContainer" class="loading-container">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Loading financial data...</p>
+                </div>
+                
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-inbox"></i>
+                    <h5 class="text-muted">No Projects Found</h5>
+                    <p class="text-muted">Try adjusting your filters or refresh the data.</p>
+                </div>
+                
+                <div id="tableContainer" style="display: none;">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                           <thead>
+    <tr>
+        <th>Invoice Number</th>
+        <th>Vendor/Supplier</th>
+        <th>Invoice Date</th>
+        <th>PO Number</th>
+        <th>Subtotal (Excl. GST)</th>
+        <th>GST Amount</th>
+        <th>Total Amount</th>
+        <th>Doc Type</th>
+        <th>Line Items</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+                            <tbody id="jobsTableBody">
+                                <!-- Jobs will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ============================================================================
+// REPLACE THE ENTIRE <script> SECTION IN main.html WITH THIS
+// ============================================================================
+
+let allJobs = [];
+let filteredJobs = [];
+let previousStats = {};
+
+// Format currency
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(amount || 0);
+}
+
+// Calculate percentage change
+function calculateChange(current, previous) {
+    if (!previous || previous === 0) return 0;
+    return ((current - previous) / previous) * 100;
+}
+
+// Update trend indicators
+function updateTrendIndicators(currentStats) {
+    if (Object.keys(previousStats).length === 0) {
+        previousStats = currentStats;
+        return;
+    }
+    
+    const invoicesChange = calculateChange(currentStats.totalInvoices, previousStats.totalInvoices);
+    document.getElementById('invoicesChange').textContent = `${invoicesChange >= 0 ? '+' : ''}${invoicesChange.toFixed(1)}%`;
+    
+    const amountChange = calculateChange(currentStats.totalAmount, previousStats.totalAmount);
+    document.getElementById('amountChange').textContent = `${amountChange >= 0 ? '+' : ''}${amountChange.toFixed(1)}%`;
+    
+    const gstChange = calculateChange(currentStats.totalGST, previousStats.totalGST);
+    document.getElementById('gstChange').textContent = `${gstChange >= 0 ? '+' : ''}${gstChange.toFixed(1)}%`;
+    
+    const itemsChange = calculateChange(currentStats.totalLineItems, previousStats.totalLineItems);
+    document.getElementById('itemsChange').textContent = `${itemsChange >= 0 ? '+' : ''}${itemsChange.toFixed(1)}%`;
+    
+    previousStats = currentStats;
+}
+
+// Load invoices data
+async function loadJobs() {
+    try {
+        const response = await fetch('/api/multi-invoice-dashboard-data');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        allJobs = await response.json();
+        
+        if (!allJobs || allJobs.error) {
+            throw new Error(allJobs?.error || 'No invoice data available');
+        }
+        
+        filteredJobs = [...allJobs];
+        
+        const currentStats = {
+            totalInvoices: allJobs.length,
+            totalAmount: allJobs.reduce((sum, inv) => sum + (parseFloat(inv.total_budget) || 0), 0),
+            totalGST: allJobs.reduce((sum, inv) => sum + (parseFloat(inv.total_variance) || 0), 0),
+            totalLineItems: allJobs.reduce((sum, inv) => sum + (parseInt(inv.record_count) || 0), 0)
+        };
+        
+        updateStatistics(currentStats);
+        updateTrendIndicators(currentStats);
+        renderJobsTable();
+        
+        document.getElementById('loadingContainer').style.display = 'none';
+        document.getElementById('tableContainer').style.display = 'block';
+        
+    } catch (error) {
+        console.error('Error loading invoices:', error);
+        document.getElementById('loadingContainer').innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle text-danger"></i>
+                <h5 class="text-danger">Error Loading Invoice Data</h5>
+                <p class="text-muted">${error.message}</p>
+                <button class="btn btn-primary mt-3" onclick="window.location.href='/'">
+                    <i class="fas fa-home"></i> Return to Home
+                </button>
+            </div>
+        `;
+    }
+}
+
+// Update statistics
+function updateStatistics(stats) {
+    document.getElementById('totalInvoices').textContent = stats.totalInvoices;
+    document.getElementById('totalAmount').textContent = `$${formatCurrency(stats.totalAmount)}`;
+    document.getElementById('totalGST').textContent = `$${formatCurrency(stats.totalGST)}`;
+    document.getElementById('totalLineItems').textContent = stats.totalLineItems;
+}
+
+// Render invoices table
+function renderJobsTable() {
+    const tbody = document.getElementById('jobsTableBody');
+    const jobCount = document.getElementById('jobCount');
+    
+    if (filteredJobs.length === 0) {
+        document.getElementById('tableContainer').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'block';
+        jobCount.textContent = '0 Invoices';
+        return;
+    }
+    
+    document.getElementById('tableContainer').style.display = 'block';
+    document.getElementById('emptyState').style.display = 'none';
+    jobCount.textContent = `${filteredJobs.length} Invoices`;
+    
+    tbody.innerHTML = filteredJobs.map(invoice => {
+        const docTypeClass = invoice.status === 'CN' ? 'badge-warning' : 'badge-on';
+        const docTypeName = invoice.status === 'CN' ? 'Credit Note' : 'Invoice';
+        
+        return `
+            <tr>
+                <td>
+                    <div class="job-name">${invoice.job_number || 'N/A'}</div>
+                </td>
+                <td>
+                    <div class="job-name">${invoice.job_name || 'Unknown Vendor'}</div>
+                </td>
+                <td>${invoice.invoice_date || 'N/A'}</td>
+                <td>${invoice.po_number || 'N/A'}</td>
+                <td class="amount-cell">$${formatCurrency(invoice.total_actual)}</td>
+                <td class="amount-cell">$${formatCurrency(invoice.total_variance)}</td>
+                <td class="amount-cell">$${formatCurrency(invoice.total_budget)}</td>
+                <td>
+                    <span class="badge-status ${docTypeClass}">${docTypeName}</span>
+                </td>
+                <td>${invoice.record_count || 0}</td>
+                <td>
+                    <a href="/dashboard/invoice/${invoice.invoice_id}" class="btn btn-primary btn-details">
+                        <i class="fas fa-eye me-1"></i> View
+                    </a>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Search functionality
+document.getElementById('searchInput').addEventListener('input', function(e) {
+    filterAndSortJobs();
+});
+
+// Doc type filter
+document.getElementById('docTypeFilter').addEventListener('change', function() {
+    filterAndSortJobs();
+});
+
+// Amount filter
+document.getElementById('amountFilter').addEventListener('change', function() {
+    filterAndSortJobs();
+});
+
+// Sort functionality
+document.getElementById('sortBy').addEventListener('change', function() {
+    filterAndSortJobs();
+});
+
+// Filter and sort invoices
+function filterAndSortJobs() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const docTypeFilter = document.getElementById('docTypeFilter').value;
+    const amountFilter = document.getElementById('amountFilter').value;
+    const sortBy = document.getElementById('sortBy').value;
+    
+    // Filter
+    filteredJobs = allJobs.filter(invoice => {
+        const matchesSearch = (invoice.job_number || '').toLowerCase().includes(searchTerm) || 
+                             (invoice.job_name || '').toLowerCase().includes(searchTerm);
+        const matchesDocType = !docTypeFilter || invoice.status === docTypeFilter;
+        
+        let matchesAmount = true;
+        const amount = parseFloat(invoice.total_budget) || 0;
+        if (amountFilter === 'high') {
+            matchesAmount = amount > 10000;
+        } else if (amountFilter === 'medium') {
+            matchesAmount = amount >= 1000 && amount <= 10000;
+        } else if (amountFilter === 'low') {
+            matchesAmount = amount < 1000;
+        }
+        
+        return matchesSearch && matchesDocType && matchesAmount;
+    });
+    
+    // Sort
+    filteredJobs.sort((a, b) => {
+        switch(sortBy) {
+            case 'amount':
+                return (parseFloat(b.total_budget) || 0) - (parseFloat(a.total_budget) || 0);
+            case 'date':
+                return new Date(b.invoice_date || 0) - new Date(a.invoice_date || 0);
+            case 'vendor':
+                return (a.job_name || '').localeCompare(b.job_name || '');
+            case 'items':
+                return (parseInt(b.record_count) || 0) - (parseInt(a.record_count) || 0);
+            default:
+                return 0;
+        }
+    });
+    
+    renderJobsTable();
+}
+
+// Refresh data
+function refreshData() {
+    document.getElementById('loadingContainer').style.display = 'block';
+    document.getElementById('tableContainer').style.display = 'none';
+    document.getElementById('loadingContainer').innerHTML = `
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 text-muted">Refreshing invoice data...</p>
+    `;
+    
+    setTimeout(() => {
+        loadJobs();
+    }, 1000);
+}
+
+// Export data
+function exportData() {
+    // Create CSV content
+    const headers = ['Invoice Number', 'Vendor', 'Date', 'PO Number', 'Subtotal', 'GST', 'Total', 'Type', 'Line Items'];
+    const csvContent = [
+        headers.join(','),
+        ...filteredJobs.map(inv => [
+            inv.job_number || '',
+            `"${inv.job_name || ''}"`,
+            inv.invoice_date || '',
+            inv.po_number || '',
+            inv.total_actual || 0,
+            inv.total_variance || 0,
+            inv.total_budget || 0,
+            inv.status || 'INV',
+            inv.record_count || 0
+        ].join(','))
+    ].join('\n');
+    
+    // Create download
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `invoices_export_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Loading invoices...');
+    loadJobs();
+});
+    </script>
+</body>
+</html>
